@@ -14,12 +14,13 @@ module.exports = function(req, res, next) {
 
   //If the token is there then Verify it
   try {
-    console.log(token);
+    console.log("Mohit" + token);
     const decoded = jwt.verify(token, config.get("jwtSecret"));
     console.log(decoded);
     req.user = decoded.user;
     next();
   } catch (err) {
+    console.error(err.message);
     res.status(401).json({ msg: "Token is not valid, Authorization denied" });
   }
 };
