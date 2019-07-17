@@ -7,6 +7,7 @@ import register from "./components/auth/register";
 import login from "./components/auth/login";
 import { Provider } from "react-redux";
 import store from "./store";
+import Alert from "./components/layout/Alert";
 
 const App = () => (
   <Provider store={store}>
@@ -15,6 +16,7 @@ const App = () => (
         <Navbar />
         <Route path="/" exact component={Landing} />
         <section className="container">
+          <Alert />
           <Route path="/register" exact component={register} />
           <Route path="/login" exact component={login} />
         </section>

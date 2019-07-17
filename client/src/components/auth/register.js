@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
 
 const Register = props => {
   const [formData, setFormData] = useState({
@@ -16,11 +17,7 @@ const Register = props => {
   const onSubmit = async e => {
     e.preventDefault();
     if (formData.password === formData.password2) {
-      const newUser = {
-        name,
-        password,
-        email
-      };
+      props.register({ name, email, password });
     } else {
       props.setAlert("Passwords Don't match", "danger");
     }
@@ -38,7 +35,6 @@ const Register = props => {
             placeholder="Name"
             name="name"
             id="name"
-            required
             onChange={e => {
               console.log({ ...formData });
               setFormData({
@@ -74,7 +70,6 @@ const Register = props => {
             type="password"
             placeholder="Password"
             name="password"
-            minLength="6"
             id="password"
             onChange={e => {
               setFormData({
@@ -92,7 +87,6 @@ const Register = props => {
             type="password"
             placeholder="Confirm Password"
             name="password2"
-            minLength="6"
             id="password2"
             onChange={e => {
               setFormData({
@@ -116,5 +110,5 @@ const Register = props => {
 
 export default connect(
   null,
-  { setAlert }
+  { setAlert, register }
 )(Register);
