@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 
-const Register = () => {
+const Register = props => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,6 +21,8 @@ const Register = () => {
         password,
         email
       };
+    } else {
+      props.setAlert("Passwords Don't match", "danger");
     }
   };
   return (
@@ -36,6 +40,7 @@ const Register = () => {
             id="name"
             required
             onChange={e => {
+              console.log({ ...formData });
               setFormData({
                 ...formData,
                 name: document.getElementById("name").value
@@ -109,4 +114,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default connect(
+  null,
+  { setAlert }
+)(Register);
