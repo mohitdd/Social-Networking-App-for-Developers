@@ -1,23 +1,18 @@
 import React, { Fragment, useState } from "react";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/auth";
 
-const Login = () => {
+const Login = ({ loginUser }) => {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
-    password: "",
-    password2: ""
+    password: ""
   });
 
-  const { name, email, password, password2 } = formData;
+  const { email, password } = formData;
 
   const onSubmit = async e => {
     e.preventDefault();
-    if (formData.password === formData.password2) {
-      const newUser = {
-        password,
-        email
-      };
-    }
+    loginUser({ email, password });
   };
   return (
     <Fragment>
@@ -68,4 +63,7 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default connect(
+  null,
+  { loginUser }
+)(Login);
