@@ -3,6 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
+import { Link, Redirect } from "react-router-dom";
 
 const Register = props => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,11 @@ const Register = props => {
       props.setAlert("Passwords Don't match", "danger");
     }
   };
+
+  if (props.isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <Fragment>
       <h1 className="large text-primary">Sign Up</h1>
@@ -108,7 +114,14 @@ const Register = props => {
   );
 };
 
+const mapStateToProps = state => {
+  console.log("My state is: " + state.auth);
+  return {
+    isAuthenticated: state.auth.isAuthenticated
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert, register }
 )(Register);

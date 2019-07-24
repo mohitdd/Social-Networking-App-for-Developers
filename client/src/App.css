@@ -575,13 +575,3 @@ button {
     padding: 0.3rem 0.4rem;
   }
 }
-
-.login-form {
-  max-width: 300px;
-}
-.login-form-forgot {
-  float: right;
-}
-.login-form-button {
-  width: 100%;
-}

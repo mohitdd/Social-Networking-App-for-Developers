@@ -10,6 +10,7 @@ import store from "./store";
 import Alert from "./components/layout/Alert";
 import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
+import Dashboard from "./components/dashboard/Dashboard";
 
 if (localStorage.token) {
   console.log("I am called to set a token");
@@ -31,6 +32,7 @@ const App = () => {
             <Alert />
             <Route path="/register" exact component={register} />
             <Route path="/login" exact component={login} />
+            <Route path="/dashboard" exact component={Dashboard} />
           </section>
         </Fragment>
       </Router>
