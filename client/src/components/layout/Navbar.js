@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 
@@ -8,13 +8,11 @@ const Navbar = props => {
     <ul>
       <li>
         <Link to="/dashboard">
-          <i class="fas fa-user" />
-          {""}
-          Dashboard
+          <i class="fas fa-user" /> Dashboard
         </Link>
       </li>
       <li>
-        <a onClick={props.logout} href="#!">
+        <a onClick={props.logout} href="/">
           <i class="fas fa-sign-out-alt" />
           Logout
         </a>
