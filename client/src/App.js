@@ -12,6 +12,8 @@ import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/profile-forms/CreateProfile";
+import EditProfile from "./components/profile-forms/EditProfile";
+import AddExperience from "./components/profile-forms/AddExperience";
 
 if (localStorage.token) {
   console.log("I am called to set a token");
@@ -35,6 +37,8 @@ const App = () => {
             <Route path="/login" exact component={login} />
             <Route path="/dashboard" exact component={Dashboard} />
             <Route path="/create-profile" exact component={CreateProfile} />
+            <Route path="/edit-profile" exact component={EditProfile} />
+            <Route path="/add-experience" exact component={AddExperience} />
           </section>
         </Fragment>
       </Router>

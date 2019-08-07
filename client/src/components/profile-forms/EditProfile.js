@@ -1,10 +1,15 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { createProfile } from "../../actions/profile";
-import { Redirect, Link, withRouter } from "react-router-dom";
+import { createProfile, getCurrentUserProfile } from "../../actions/profile";
 
-const CreateProfile = props => {
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentUserProfile,
+  history
+}) => {
   const [formData, setFormData] = useState({
     company: "",
     website: "",
@@ -19,7 +24,29 @@ const CreateProfile = props => {
     youtube: "",
     instagram: ""
   });
+
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+  useEffect(() => {
+    getCurrentUserProfile();
+    console.log("helios");
+    setFormData({
+      company: loading || !profile.company ? "" : profile.company,
+      website: loading || !profile.website ? "" : profile.website,
+      location: loading || !profile.location ? "" : profile.location,
+      status: loading || !profile.status ? "" : profile.status,
+      skills: loading || !profile.skills ? "" : profile.skills.join(","),
+      githubusername:
+        loading || !profile.githubusername ? "" : profile.githubusername,
+      bio: loading || !profile.bio ? "" : profile.bio,
+      twitter: loading || !profile.social ? "" : profile.social.twitter,
+      facebook: loading || !profile.social ? "" : profile.social.facebook,
+      linkedin: loading || !profile.social ? "" : profile.social.linkedin,
+      youtube: loading || !profile.social ? "" : profile.social.youtube,
+      instagram: loading || !profile.social ? "" : profile.social.instagram
+    });
+  }, [loading, getCurrentUserProfile]);
+
   const {
     company,
     website,
@@ -35,30 +62,25 @@ const CreateProfile = props => {
     instagram
   } = formData;
 
-  const onChange = e => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = e => {
+    e.preventDefault();
+    createProfile(formData, history, true);
   };
 
-  const onSubmit = async e => {
-    e.preventDefault();
-    console.log("I am reaching here with the form data");
-    await props.createProfile(formData, false, props.history);
-  };
   return (
     <Fragment>
-      <h1 classNameName="large text-primary">Create Your Profile</h1>
+      <h1 className="large text-primary">Edit Your Profile</h1>
       <p className="lead">
-        <i className="fas fa-user" /> Let's get some information to make your
-        profile stand out
+        <i className="fas fa-user" /> Add some changes to your profile
       </p>
       <small>* = required field</small>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
           <select name="status" value={status} onChange={e => onChange(e)}>
-            <option value="0">* Select Professional Status</option>
+            <option>* Select Professional Status</option>
             <option value="Developer">Developer</option>
             <option value="Junior Developer">Junior Developer</option>
             <option value="Senior Developer">Senior Developer</option>
@@ -134,7 +156,12 @@ const CreateProfile = props => {
           </small>
         </div>
         <div className="form-group">
-          <textarea placeholder="A short bio of yourself" name="bio" />
+          <textarea
+            placeholder="A short bio of yourself"
+            name="bio"
+            value={bio}
+            onChange={e => onChange(e)}
+          />
           <small className="form-text">Tell us a little about yourself</small>
         </div>
 
@@ -148,48 +175,86 @@ const CreateProfile = props => {
           </button>
           <span>Optional</span>
         </div>
-        {!displaySocialInputs ? (
-          console.log("Hiding it")
-        ) : (
+
+        {displaySocialInputs && (
           <Fragment>
             <div className="form-group social-input">
               <i className="fab fa-twitter fa-2x" />
-              <input type="text" placeholder="Twitter URL" name="twitter" />
+              <input
+                type="text"
+                placeholder="Twitter URL"
+                name="twitter"
+                value={twitter}
+                onChange={e => onChange(e)}
+              />
             </div>
 
             <div className="form-group social-input">
               <i className="fab fa-facebook fa-2x" />
-              <input type="text" placeholder="Facebook URL" name="facebook" />
+              <input
+                type="text"
+                placeholder="Facebook URL"
+                name="facebook"
+                value={facebook}
+                onChange={e => onChange(e)}
+              />
             </div>
 
             <div className="form-group social-input">
               <i className="fab fa-youtube fa-2x" />
-              <input type="text" placeholder="YouTube URL" name="youtube" />
+              <input
+                type="text"
+                placeholder="YouTube URL"
+                name="youtube"
+                value={youtube}
+                onChange={e => onChange(e)}
+              />
             </div>
 
             <div className="form-group social-input">
               <i className="fab fa-linkedin fa-2x" />
-              <input type="text" placeholder="Linkedin URL" name="linkedin" />
+              <input
+                type="text"
+                placeholder="Linkedin URL"
+                name="linkedin"
+                value={linkedin}
+                onChange={e => onChange(e)}
+              />
             </div>
 
             <div className="form-group social-input">
               <i className="fab fa-instagram fa-2x" />
-              <input type="text" placeholder="Instagram URL" name="instagram" />
+              <input
+                type="text"
+                placeholder="Instagram URL"
+                name="instagram"
+                value={instagram}
+                onChange={e => onChange(e)}
+              />
             </div>
           </Fragment>
         )}
+
         <input type="submit" className="btn btn-primary my-1" />
-        <a className="btn btn-light my-1" href="dashboard.html">
+        <Link className="btn btn-light my-1" to="/dashboard">
           Go Back
-        </a>
+        </Link>
       </form>
     </Fragment>
   );
 };
 
-CreateProfile.propTypes = {};
+EditProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  profile: state.profile
+});
 
 export default connect(
-  null,
-  { createProfile }
-)(withRouter(CreateProfile));
+  mapStateToProps,
+  { createProfile, getCurrentUserProfile }
+)(withRouter(EditProfile));
